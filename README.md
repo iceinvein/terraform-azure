@@ -2,6 +2,8 @@
 
 This creates a free tier cosmos db and uses the connection string to provision app service that uses a pre defined container registry where an image has been pushed.
 
+CI is enabled and terraform doesn't perform new image deployments
+
 ## Test run
 
 Create `test.tfvars` file and suply the required values for variables in `variables.tf`
