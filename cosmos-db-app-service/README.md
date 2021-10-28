@@ -1,6 +1,6 @@
 # Terraform Azure (CosmosDB and App service)
 
-This creates a free tier cosmos db and uses the connection string to provision app service that uses a pre defined container registry where an image has been pushed.
+This creates a free tier cosmos db and uses the connection string to provision app service that uses a pre defined container registry where an image has been pushed. It uses service principle to handle the workloads.
 
 CI is enabled and terraform doesn't perform new image deployments
 
