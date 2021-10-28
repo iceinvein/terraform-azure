@@ -17,7 +17,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "terraform-resource-group"
+  name     = var.resource_group_name
   location = var.location
 }
 
@@ -27,7 +27,7 @@ resource "random_integer" "ri" {
 }
 
 resource "azurerm_cosmosdb_account" "this" {
-  name                = "tf-cosmos-db-${random_integer.ri.result}"
+  name                = "cosmos-db-${random_integer.ri.result}"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   offer_type          = "Standard"
@@ -57,7 +57,7 @@ data "azurerm_container_registry" "this" {
 }
 
 resource "azurerm_app_service_plan" "this" {
-  name                = "tf-app-service-plan"
+  name                = var.app_service_plan_name
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   kind                = "Linux"
@@ -70,13 +70,13 @@ resource "azurerm_app_service_plan" "this" {
 }
 
 resource "azurerm_app_service" "this" {
-  name                = "sds-api-dev"
+  name                = var.app_service_name
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   app_service_plan_id = azurerm_app_service_plan.this.id
 
   site_config {
-    linux_fx_version = "DOCKER|containerbucket.azurecr.io/sds-api:latest"
+    linux_fx_version = "DOCKER|${var.container_image}"
     use_32_bit_worker_process = true
   }
 
@@ -89,15 +89,7 @@ resource "azurerm_app_service" "this" {
     "WEBSITE_PORT"                        = "5000"
     "DOCKER_ENABLE_CI"                    = "true"
     "DOCKER_REGISTRY_SERVER_URL"          = data.azurerm_container_registry.this.login_server
-    "CLAM_SCAN"                           = "false"
-    "CORS_ORIGIN"                         = var.cors_origin
-    "JWT_AUDIENCE"                        = "RMT"
-    "JWT_ISSUER"                          = "RMT-AUTH"
-    "JWT_EXPIRE"                          = "3600"
     "MONGO_DB_URI"                        = azurerm_cosmosdb_account.this.connection_strings.0
-    "NODE_ENV"                            = "prod"
-    "PORT"                                = "5000"
-    "ROOT_PASSWORD"                       = var.root_password
     "DOCKER_REGISTRY_SERVER_USERNAME"     = data.azurerm_container_registry.this.admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"     = data.azurerm_container_registry.this.admin_password
   }
