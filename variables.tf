@@ -38,3 +38,15 @@ variable "container_registry_name" {
 variable "container_registry_resource_group" {
   type    = string
 }
+
+variable "container_image" {
+  type = string
+}
+
+variable "app_service_name" {
+  type = string
+}
+
+variable "app_service_plan_name" {
+  type = string
+}
