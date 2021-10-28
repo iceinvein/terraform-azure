@@ -2,19 +2,7 @@
 
 ## Test run
 
-Create test.tfvars file and suply the required values
-
-```text
-client_secret = ""
-subscription_id = ""
-client_id = ""
-tenant_id = ""
-location = ""
-cors_origin = ""
-root_password = ""
-container_registry_resource_group = ""
-container_registry_name = ""
-```
+Create `test.tfvars` file and suply the required values for variables in `variables.tf`
 
 ## Initialize
 
